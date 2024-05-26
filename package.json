@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "react": "^18.2.0",
+    "swiper": "^11.0.7"
+  },
+  "devDependencies": {
+    "zustand": "^4.5.2"
+  }
+}
