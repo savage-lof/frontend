@@ -8,7 +8,7 @@ import { useStore } from "@/app/store/app-store";
 
 export const AuthForm = (props) => {
   const authContext = useStore();
-  const [authData, setAuthData] = useState({ identifier: "", password: "" });
+  const [authData, setAuthData] = useState({ email: "", password: "" });
   const [message, setMessage] = useState({ status: null, text: null });
   const handleInput = (e) => {
     setAuthData({ ...authData, [e.target.name]: e.target.value });
@@ -17,7 +17,7 @@ export const AuthForm = (props) => {
     e.preventDefault();
     const userData = await authorize(endpoints.auth, authData);
     if (isResponseOk(userData)) {
-      authContext.login(userData.user, userData.jwt);
+      authContext.login({ ...userData, id: userData._id }, userData.jwt);
       setMessage({ status: "success", text: "Вы авторизовались!" });
     } else {
       setMessage({ status: "error", text: "Неверные почта или пароль" });
@@ -42,7 +42,7 @@ export const AuthForm = (props) => {
           <input
             onInput={handleInput}
             className={Styles["form__field-input"]}
-            name="identifier"
+            name="email"
             type="email"
             placeholder="hello@world.com"
           />
@@ -58,9 +58,7 @@ export const AuthForm = (props) => {
           />
         </label>
       </div>
-      {message.status && (
-        <p className={Styles["form__message"]}>{message.text}</p>
-      )}
+      {message.status && <p className={Styles["form__message"]}>{message.text}</p>}
       <div className={Styles["form__actions"]}>
         <button className={Styles["form__reset"]} type="reset">
           Очистить
